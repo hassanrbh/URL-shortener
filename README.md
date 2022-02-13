@@ -1,24 +1,5 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+In this project, I build a tool that will take an arbitrarily-long URL and will shorten it for anybody and also for subsequent users can then give the short URL back to my tool and be redirected to the original URL. and Also I am tracking the clickthroughs since they can be really helful for business analytics
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Still In Development
