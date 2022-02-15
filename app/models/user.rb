@@ -16,4 +16,16 @@ class User < ApplicationRecord
         primary_key: :id,
         foreign_key: :user_id
     )
+
+    has_many(
+        :visited_urls,
+        through: :submitter_urls,
+        source: :visits
+    )
+    has_many(
+        :visits,
+        class_name: 'Visit',
+        primary_key: :id,
+        foreign_key: :user_id
+    )
 end
