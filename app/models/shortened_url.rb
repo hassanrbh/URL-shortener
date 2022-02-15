@@ -22,7 +22,12 @@ class ShortenedUrl < ApplicationRecord
     def num_recent_uniques
         ShortenedUrl.where("created_at <= ?", 10.minutes.ago)
     end
-
+    def self.create_shortened_url(user,long_url)
+        ShortenedUrl.create!(
+            user_id: user.id,
+            long_url: long_url
+        )
+    end
     def random_code
         loop do 
             token = SecureRandom.urlsafe_base64(16)

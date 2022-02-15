@@ -1,0 +1,80 @@
+#! /usr/bin/env ruby
+require 'optparse'
+require 'readline'
+require 'launchy'
+Options = Struct.new(:name)
+
+class Parser 
+    def self.parse(options)
+        args = Options.new("")
+        opt_parser = OptionParser.new do |opts|
+            opts.banner = <<-TEXT
+Shortener URL
+    - 1. just provide your email 
+    - 2. chose from create a shortened url or visit your shortened url
+    - 3. then you can get your unique short_url 
+    - 4. you can go and decrypt it with our tool and you will get an extra
+            .. open in your website , thanks me later
+            TEXT
+
+            opts.on("-v","--verbose","show extra information") do
+                options[:verbose] = true
+             end
+            opts.on("-c","--color","Enable Syntax highlighting") do 
+                options[:syntax_highlight] = true
+            end
+            opts.on("-e","--email","push your email address") do 
+                print "Input your email: \n"
+                print "> "
+                email = gets.chomp
+                print "Your email address => #{email} \n"
+
+                # see if the email in db or not
+                unless User.find_by_email(email) == nil
+                    print "Visit Shortened URL -[first] \n"
+                    option = gets.chomp
+                    if option == "first"
+                        print "Type in the shortened URL"
+                        print "> "
+                        short_url = gets.chomp
+                        targeted_url = ShortenedUrl.find_by(short_url: short_url).long_url
+                        Launchy.open(targeted_url)
+                        print "Launching #{targeted_url} ...\n"
+                        print "Goodbye! \n"
+
+                        # record a visit for this email
+                        user_visit = ShortenedUrl.find_by(short_url: short_url).submitter
+                        shortened_visit = ShortenedUrl.find_by(short_url: short_url)
+                        Visit.record_visit!(user_visit,shortened_visit )
+                    end
+                else
+                    print "Create Shortened URL -[second] \n"
+                    option = ""
+                    case option
+                    when "first"
+                        print "Type in the long URL"
+                        print "> "
+                        long_url = gets.chomp
+                        ShortenedUrl.create_shortened_url()
+                    when "second"
+                        puts "some magic"
+                    end
+                end
+            end
+            opts.on("-h","--help","helper method") do 
+                puts opts
+            end
+        end
+        opt_parser.parse!(options)
+        return args
+    end
+end
+
+options = Parser.parse %w[-e]
+options
+
+
+
+
+
+
