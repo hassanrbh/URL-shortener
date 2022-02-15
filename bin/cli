@@ -49,15 +49,17 @@ Shortener URL
                     end
                 else
                     print "Create Shortened URL -[second] \n"
-                    option = ""
-                    case option
-                    when "first"
+                    option = gets.chomp
+                    if option == "second"
                         print "Type in the long URL"
                         print "> "
                         long_url = gets.chomp
-                        ShortenedUrl.create_shortened_url()
-                    when "second"
-                        puts "some magic"
+                        # create the user 
+                        user = User.create(email: email)
+                        # create the shortened url and inheritly short_url will raised
+                        new_user = ShortenedUrl.create_shortened_url(user,long_url)
+                        print "Short Url is => #{new_user.short_url} \n"
+                        print "Good by"
                     end
                 end
             end
@@ -70,7 +72,7 @@ Shortener URL
     end
 end
 
-options = Parser.parse %w[-e]
+options = Parser.parse %w[-h -e]
 options
 
 
