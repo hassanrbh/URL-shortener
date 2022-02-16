@@ -51,4 +51,12 @@ class ShortenedUrl < ApplicationRecord
         through: :visits,
         source: :visitor
     )
+
+    # Many to many relationship
+    has_many :taggings,
+        class_name: 'Tagging',
+        primary_key: :id,
+        foreign_key: :shortener_id
+    # Tag topics Relation
+    has_many :tag_topics, through: :taggings, source: :tag_topic
 end
