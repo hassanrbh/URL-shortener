@@ -63,6 +63,40 @@ Shortener URL
                     end
                 end
             end
+            opts.on("-start","--starting","Start The shortener app") do 
+                # Ask for email
+                print "Input your email"
+                print "> "
+                email = gets.chomp
+                # Ask the user for the options
+                print "0. create Shortened URL [first] \n"
+                print "1. Visit Shortened URL [second] \n"
+                print "> "
+                options = gets.chomp
+                if options == "first"
+                    print "Type in your long url"
+                    print "> "
+                    long_url = gets.chomp
+                    # Output the short url with the email and long url propertie
+                    user = User.find_by(email: email)
+                    ShortenedUrl.create_shortened_url(user,long_url)
+                    print "Short url is #{ShortenedUrl.find_by(long_url: long_url).short_url} \n"
+                    print "Good By"
+                else
+                    print "Type in the shortened url"
+                    print "> "
+                    short_url = gets.chomp
+                    targeted_url = ShortenedUrl.find_by(short_url: short_url).long_url
+                    Launchy.open(targeted_url)
+                    print "Launching #{targeted_url} ...\n"
+                    print "Good by"
+                    # Record a visit 
+                    
+                    user_visit = ShortenedUrl.find_by(short_url: short_url).submitter
+                    shortened_visit = ShortenedUrl.find_by(short_url: short_url)
+                    Visit.record_visit!(user_visit,shortened_visit )
+                end
+            end
             opts.on("-h","--help","helper method") do 
                 puts opts
             end
@@ -72,7 +106,7 @@ Shortener URL
     end
 end
 
-options = Parser.parse %w[-h -e]
+options = Parser.parse %w[-h -start]
 options
 
 
