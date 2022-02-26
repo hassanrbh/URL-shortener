@@ -12,6 +12,8 @@
 class ShortenedUrl < ApplicationRecord
     validates :long_url, presence: true, uniqueness: true
     validates :user_id, presence: true
+    scope :premium_users, -> {  joins(:submitter).select("shortened_urls.*, users.*").where("users.premium = ?", true).uniq }
+    scope :check_users_nil, -> { where.not(id: nil) }
     validate(:no_spamming, :nonpremium_max)
     validate(:random_code)
     def num_clicks
@@ -26,7 +28,7 @@ class ShortenedUrl < ApplicationRecord
     def self.create_shortened_url(user,long_url)
         ShortenedUrl.create!(
             user_id: user.id,
-            long_url: long_url
+            long_url: long_url 
         )
     end
     def random_code
@@ -36,6 +38,8 @@ class ShortenedUrl < ApplicationRecord
             break;
         end
     end
+
+    has_many :votes , primary_key: :id, foreign_key: :user_id, class_name: 'Vote'
 
     belongs_to :submitter,
         primary_key: :id,
@@ -79,7 +83,7 @@ class ShortenedUrl < ApplicationRecord
             errors[:only] <<  'premium members can create more than 5 short urls'
         end 
     end
-
+    
     # ! Pruning Stale URLs: we are going to remove URLs from our database that hase not been pruned or visited in a long period of time
 
     def self.prune(n)
