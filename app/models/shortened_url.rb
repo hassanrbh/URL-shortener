@@ -56,7 +56,9 @@ class ShortenedUrl < ApplicationRecord
         through: :visits,
         source: :visitor
     )
+    def track_visitors(visitor_id)
 
+    end
     # Many to many relationship
     has_many :taggings,
         class_name: 'Tagging',
