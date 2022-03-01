@@ -14,6 +14,10 @@ class ShortenedUrl < ApplicationRecord
     validates :user_id, presence: true
     scope :premium_users, -> {  joins(:submitter).select("shortened_urls.*, users.*").where("users.premium = ?", true).uniq }
     scope :check_users_nil, -> { where.not(id: nil) }
+    delegate :email, :premium, to: :submitter, prefix: :show
+    delegate :tag_topic, to: :tag_topics, prefix: :show
+    delegate :topic_id, to: :taggings, prefix: :show
+    before_validation :ensure_random_code
     validate(:no_spamming, :nonpremium_max)
     validate(:random_code)
     def num_clicks
@@ -44,7 +48,8 @@ class ShortenedUrl < ApplicationRecord
     belongs_to :submitter,
         primary_key: :id,
         class_name: 'User',
-        foreign_key: :user_id
+        foreign_key: :user_id,
+        dependent: :destroy
 
     has_many :visits,
         primary_key: :id,
@@ -118,5 +123,29 @@ class ShortenedUrl < ApplicationRecord
                 )"
             )
     end
+    protected 
+    
+    def ensure_random_code
+        self.random_code ||= SecureRandom.hex(8) 
+    end
 end
 
+
+
+=begin
+    -> Users Model (id: 1)
+    -> Posts Model (id: 1)
+    
+    1. user click the destroy button
+    2. now the relational calback will be triggered a destroy method with the
+    same id of the user then will destroy all the posts(user_id: 1)
+
+    # Relational Callback: 
+        -> dependent: :destroy
+        -> dependent: :nullify
+        -> dependent: :restrict
+    # callback Registration: 
+        -> before_validation: :method (to set forgotten fields)
+        -> after_create: :method (post-create logic)
+        -> after_destroy: :method (post-destroy logic)
+=end

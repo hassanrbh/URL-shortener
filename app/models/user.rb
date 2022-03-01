@@ -10,7 +10,10 @@
 #
 class User < ApplicationRecord
     validates :email, presence: true, uniqueness: true
-
+    validates :premium, presence: true, inclusion: {
+        in: %w(true false)
+        #message: "not valid premium"
+    }
     has_many(
         :submitter_urls,
         class_name: 'ShortenedUrl',

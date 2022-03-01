@@ -27,4 +27,8 @@ class Visit < ApplicationRecord
     def last_visit
         Visit.last
     end
+
+    def first_visit
+        Visit.first
+    end
 end
