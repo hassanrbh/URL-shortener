@@ -10,6 +10,7 @@ class UserController < ApplicationController
     end
 
     def new
+        @user = User.new
         render :new
     end
 
@@ -19,15 +20,16 @@ class UserController < ApplicationController
         if @user.save
             redirect_to user_url(@user)
         else
-            redirect_to new_user_url
-            # render json: @user.errors.full_messages , status: :unprocessable_entity 
+            # redirect_to new_user_url
+            # render :new
+            render plain: @user.errors.full_messages , status: :unprocessable_entity 
         end
     end
 
     def destroy
         @user = User.find_by(:id => params[:id]) 
         @user.destroy
-        redirect_to user_url(@user.id+1)    
+        redirect_to new_user_url    
     end
     # A Passlist
     private

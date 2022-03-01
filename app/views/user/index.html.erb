@@ -12,11 +12,11 @@
         <%= @user.each_with_index do |user,index| %>
             <ol>The user position => #<strong><%= index %></strong>
                 <li>The User email => <strong><%= user.email%></strong></li>
-                <li><a href="<%= user_path(user)%>" <input type="button">Redirect me</input></a></li>
+                <li><a href="<%= user_path(@user)%>" <input type="button">Redirect me</input></a></li>
 
                 <!-- FORM FOR DELETETING USERS THAT ARE CREATED -->
 
-                <form action= "<%= user_url(user) %>" method="POST">
+                <form action= "<%= user_url(@user) %>" method="POST">
                 <input type="hidden" name="_method" value="DELETE">
 
                 <input type="button" value="DESTROY">

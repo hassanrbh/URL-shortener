@@ -4,21 +4,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Create A User</title>
 </head>
 <body>
+    <h1>Create A User From This FORM</h1>
     <form action= "/user" method= "POST">
         <label for="user_email">Email</label>
-        <input type="text" name="user[email]" id="user_email" >
+        <input type="text"
+               name="user[email]"
+               id="user_email"
+               value="<%= @user.email %>">
         <br>
-
+        
         <label for="user_premium">Premium</label>
+        <select name="user[premium]" id="user_premium">
+            <% User::TYPES.each do |type| %>
+                <option value = "<%= type %>"
+                <%= "selected" if @user.premium == type %>>
+                <%= type.upcase %> </option>
+            <% end %>
+        </select>
+
+        <label for="toy_user">toy</label>
         <select>
-            <option value="false">    
+            <% User::TYPES_USER.each do |user_type| %>
+                <option value= "<%= user_type %>"
+                <%= "selected" if @user.premium == user_type %>>
+                <%= user_type.upcase%></option>
+            <%end%>
         </select>
         <br>
 
-        <input type="submit" value="Create User!">
+        <input type="submit" value="Confirm">
     </form>
 </body>
 </html>

@@ -9,11 +9,21 @@
 #  premium    :boolean          default(FALSE)
 #
 class User < ApplicationRecord
+    TYPES = [
+        "false",
+        "true"
+    ]
+    TYPES_USER = [
+        "admin",
+        "role",
+        "user",
+        "legend user",
+        "basic user",
+        "super admin",
+        "player of the game"
+    ] 
     validates :email, presence: true, uniqueness: true
-    validates :premium, presence: true, inclusion: {
-        in: %w(true false)
-        #message: "not valid premium"
-    }
+    validates :premium, inclusion: TYPES_USER
     has_many(
         :submitter_urls,
         class_name: 'ShortenedUrl',
