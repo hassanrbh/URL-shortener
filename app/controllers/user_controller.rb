@@ -31,6 +31,9 @@ class UserController < ApplicationController
         @user.destroy
         redirect_to new_user_url    
     end
+
+    def videos
+    end
     # A Passlist
     private
 

@@ -56,4 +56,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_18_211352) do
     t.integer "user_id", null: false
   end
 
+
 end

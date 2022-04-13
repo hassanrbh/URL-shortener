@@ -36,7 +36,7 @@ class ShortenedUrl < ApplicationRecord
         )
     end
     def random_code
-        loop do 
+        loop do  
             token = SecureRandom.urlsafe_base64(16)
             self.short_url = token
             break;
